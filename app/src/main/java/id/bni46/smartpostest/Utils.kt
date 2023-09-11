@@ -1,4 +1,4 @@
-package id.bni46.smartpostest.ui.theme
+package id.bni46.smartpostest
 
 import com.zcs.sdk.pin.PinWorkKeyTypeEnum
 import com.zcs.sdk.pin.pinpad.PinPadManager
@@ -13,8 +13,7 @@ interface Utils {
     var encryptData: String
 
     fun setMainKey(): String {
-        return try {
-            val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
+        return try { val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
             "${
                 mPadManager.pinPadUpMastKey(
                     0,

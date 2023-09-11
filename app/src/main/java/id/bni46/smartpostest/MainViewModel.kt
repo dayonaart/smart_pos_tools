@@ -8,7 +8,6 @@ import androidx.compose.runtime.setValue
 import com.zcs.sdk.DriverManager
 import com.zcs.sdk.SdkResult
 import com.zcs.sdk.pin.pinpad.PinPadManager
-import id.bni46.smartpostest.ui.theme.Utils
 
 
 class MainViewModel(private val context: Context) : Composeable, Utils {
@@ -22,7 +21,6 @@ class MainViewModel(private val context: Context) : Composeable, Utils {
     private val mDriverManager = DriverManager.getInstance()
     private val mSys = mDriverManager.baseSysDevice
     override val mPadManager: PinPadManager = mDriverManager.padManager
-
 
     fun initSdk() {
         try {

@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import id.bni46.smartpostest.ui.theme.Utils
 
 interface Composeable : Utils {
     override var masterKey: String
