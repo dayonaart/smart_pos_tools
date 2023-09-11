@@ -13,7 +13,8 @@ interface Utils {
     var encryptData: String
 
     fun setMainKey(): String {
-        return try { val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
+        return try {
+            val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
             "${
                 mPadManager.pinPadUpMastKey(
                     0,
@@ -25,7 +26,7 @@ interface Utils {
         }
     }
 
-    fun setWorkKey(): String {
+    fun setPinPadUpWorkKey(): String {
         return try {
             val pinKeyByte = StringUtils.convertHexToBytes(pinKey)
             val macKeyByte = StringUtils.convertHexToBytes(macKey)

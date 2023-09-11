@@ -120,11 +120,11 @@ interface Composeable : Utils {
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedButton(
                     onClick = {
-                        resultKey = setWorkKey()
+                        resultKey = setPinPadUpWorkKey()
                         nav.navigate("dialog")
                     }
                 ) {
-                    Text(text = "Inject Pin Key")
+                    Text(text = "Setup work key")
                 }
             }
         }
