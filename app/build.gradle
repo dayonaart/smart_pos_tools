@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'id.bni46.smartpostest'
+    namespace 'id.bni46.zcstools'
     compileSdk 33
 
     defaultConfig {
-        applicationId "id.bni46.smartpostest"
+        applicationId "id.bni46.zcstools"
         minSdk 24
         versionCode 1
         versionName "1.0"

@@ -1,4 +1,4 @@
-package id.bni46.smartpostest
+package id.bni46.zcstools
 
 import android.content.Context
 import android.widget.Toast

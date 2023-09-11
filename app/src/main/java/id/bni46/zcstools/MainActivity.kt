@@ -1,4 +1,4 @@
-package id.bni46.smartpostest
+package id.bni46.zcstools
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,7 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
-import id.bni46.smartpostest.ui.theme.SmartPosTestTheme
+import id.bni46.zcstools.ui.theme.SmartPosTestTheme
 
 class MainActivity : ComponentActivity() {
     private val mainViewModel = MainViewModel(this)

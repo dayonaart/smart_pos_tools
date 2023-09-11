@@ -1,4 +1,4 @@
-package id.bni46.smartpostest.ui.theme
+package id.bni46.zcstools.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,4 +1,4 @@
-package id.bni46.smartpostest
+package id.bni46.zcstools
 
 import com.zcs.sdk.pin.PinWorkKeyTypeEnum
 import com.zcs.sdk.pin.pinpad.PinPadManager
