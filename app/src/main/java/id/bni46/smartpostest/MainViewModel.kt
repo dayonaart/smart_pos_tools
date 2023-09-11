@@ -36,9 +36,9 @@ class MainViewModel(private val context: Context) {
     private var macKey by mutableStateOf("8670685795c8d2ea0000000000000000d2db51f1")
     private var tdkKey by mutableStateOf("00A0ABA733F2CBB1E61535EDCFDC34A93AA3EA2D")
     private var encryptData by mutableStateOf("Message for encrypt")
+    private var resultKey by mutableStateOf("")
     private var keyStateList = listOf(pinKey, macKey, tdkKey)
     private var keyTitleList = listOf("PIN Key", "MAC Key", "TDK Key")
-    private var resultKey by mutableStateOf("")
     private val mDriverManager = DriverManager.getInstance()
     private val mSys = mDriverManager.baseSysDevice
     private val mPadManager = mDriverManager.padManager
