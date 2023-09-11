@@ -35,7 +35,6 @@ interface Composeable : Utils {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun ShowDialog(nav: NavHostController) {
-
         AlertDialog(
             onDismissRequest = {
                 nav.popBackStack("dialog", inclusive = true)

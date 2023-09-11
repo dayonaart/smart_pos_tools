@@ -45,6 +45,7 @@ class MainActivity : ComponentActivity() {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(bottom = 10.dp)
                                 .background(color = Color.DarkGray)
                                 .padding(10.dp)
                         ) {
@@ -56,7 +57,9 @@ class MainActivity : ComponentActivity() {
                         }
                     }) {
                         NavHost(
-                            modifier = Modifier.padding(it),
+                            modifier = Modifier
+                                .padding(it)
+                                .padding(horizontal = 10.dp),
                             navController = nav,
                             startDestination = "main"
                         ) {
