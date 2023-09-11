@@ -152,7 +152,7 @@ class MainViewModel(private val context: Context) {
         // index: means Key index, 0x00~0x0F
         // key: The key length is a multiple of 8.
         return mPadManager.pinPadUpMastKey(
-            KeyId.mainKey,
+            0,
             mainKeyByte, mainKeyByte.size.toByte()
         )
     }
@@ -184,20 +184,19 @@ class MainViewModel(private val context: Context) {
         val macKeyByte = StringUtils.convertHexToBytes(macKey)
         val tdkeyByte = StringUtils.convertHexToBytes(tdkKey)
         return mPadManager.pinPadUpWorkKey(
-            KeyId.pinKey, pinKeyByte, pinKeyByte.size.toByte(),
+            0, pinKeyByte, pinKeyByte.size.toByte(),
             macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
         )
     }
 
     private fun setEncryptData(): String {
         return try {
-            val dataForDes = "11111111111111111111111111111111";
-            val res = byteArrayOf((dataForDes.length / 2).toByte())
+            val res = byteArrayOf((encryptData.length / 2).toByte())
             val ret = mPadManager.pinPadEncryptData(
                 0,
                 PinWorkKeyTypeEnum.MAC_KEY,
-                StringUtils.convertHexToBytes(dataForDes),
-                dataForDes.length / 2,
+                StringUtils.convertHexToBytes(encryptData),
+                encryptData.length / 2,
                 res
             )
             "encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
