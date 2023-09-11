@@ -1,16 +1,18 @@
 package id.bni46.smartpostest
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -28,10 +30,12 @@ interface Composeable : Utils {
     var resultKey: String
     override var encryptData: String
     val keyTitleList: List<String>
+    val context: Context
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun ShowDialog(nav: NavHostController) {
+
         AlertDialog(
             onDismissRequest = {
                 nav.popBackStack("dialog", inclusive = true)
@@ -46,9 +50,17 @@ interface Composeable : Utils {
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = {
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.Rounded.Star, contentDescription = null)
-                        }
+                        Text(text = "Copy", modifier = Modifier
+                            .clickable {
+                                val clipboardManager =
+                                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val myClip: ClipData = ClipData.newPlainText("note_copy", resultKey)
+                                clipboardManager.setPrimaryClip(myClip)
+                                Toast
+                                    .makeText(context, "copied", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            .padding(end = 10.dp))
                     })
             }
         )

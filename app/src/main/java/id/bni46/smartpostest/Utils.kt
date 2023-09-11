@@ -13,16 +13,16 @@ interface Utils {
     var encryptData: String
 
     fun setMainKey(): String {
-        return try {
+        try {
             val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
-            "${
+            return "${
                 mPadManager.pinPadUpMastKey(
                     0,
                     mainKeyByte, mainKeyByte.size.toByte()
                 )
             }"
         } catch (e: Exception) {
-            "$e"
+            return "$e"
         }
     }
 
