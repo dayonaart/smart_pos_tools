@@ -27,18 +27,18 @@ interface Utils {
     }
 
     fun setPinPadUpWorkKey(): String {
-        return try {
+        try {
             val pinKeyByte = StringUtils.convertHexToBytes(pinKey)
             val macKeyByte = StringUtils.convertHexToBytes(macKey)
             val tdkeyByte = StringUtils.convertHexToBytes(tdkKey)
-            "${
+            return "${
                 mPadManager.pinPadUpWorkKey(
                     0, pinKeyByte, pinKeyByte.size.toByte(),
                     macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
                 )
             }"
         } catch (e: Exception) {
-            "$e"
+            return "$e"
         }
     }
 
