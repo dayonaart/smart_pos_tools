@@ -149,7 +149,7 @@ interface Composeable : Utils {
                 nav.navigate("dialog")
             }
         ) {
-            Text(text = "Inject Master Key")
+            Text(text = "Encrypt Data")
         }
         Spacer(modifier = Modifier.height(20.dp))
     }
