@@ -10,35 +10,36 @@ interface Utils {
     var pinKey: String
     var macKey: String
     var tdkKey: String
+    var masterKeyIndex: String
+    var workKeyIndex: String
+    var encryptDataIndex: String
     var encryptData: String
 
     fun setMainKey(): String {
-        try {
+        return try {
             val mainKeyByte = StringUtils.convertHexToBytes(masterKey)
-            return "${
-                mPadManager.pinPadUpMastKey(
-                    0,
-                    mainKeyByte, mainKeyByte.size.toByte()
-                )
-            }"
+            val ret = mPadManager.pinPadUpMastKey(
+                masterKeyIndex.toInt(),
+                mainKeyByte, mainKeyByte.size.toByte()
+            )
+            "$ret"
         } catch (e: Exception) {
-            return "$e"
+            "$e"
         }
     }
 
     fun setPinPadUpWorkKey(): String {
-        try {
+        return try {
             val pinKeyByte = StringUtils.convertHexToBytes(pinKey)
             val macKeyByte = StringUtils.convertHexToBytes(macKey)
             val tdkeyByte = StringUtils.convertHexToBytes(tdkKey)
-            return "${
-                mPadManager.pinPadUpWorkKey(
-                    0, pinKeyByte, pinKeyByte.size.toByte(),
-                    macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
-                )
-            }"
+            val ret = mPadManager.pinPadUpWorkKey(
+                workKeyIndex.toInt(), pinKeyByte, pinKeyByte.size.toByte(),
+                macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
+            )
+            "$ret"
         } catch (e: Exception) {
-            return "$e"
+            "$e"
         }
     }
 
@@ -46,7 +47,7 @@ interface Utils {
         return try {
             val res = byteArrayOf((encryptData.length / 2).toByte())
             val ret = mPadManager.pinPadEncryptData(
-                0,
+                encryptDataIndex.toInt(),
                 PinWorkKeyTypeEnum.MAC_KEY,
                 StringUtils.convertHexToBytes(encryptData),
                 encryptData.length / 2,
