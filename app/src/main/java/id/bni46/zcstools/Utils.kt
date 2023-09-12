@@ -58,7 +58,7 @@ interface Utils : ZcsResultSdk {
             val result = code.indexOf(ret)
             message[result] + ": encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
         } catch (e: Exception) {
-            "$e"
+            "$e\nByte Array : ${byteArrayOf(((encryptData.length / 2).toByte()))}\ninput length : ${encryptData.length / 2}"
         }
     }
 }
