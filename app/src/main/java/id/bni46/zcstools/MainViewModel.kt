@@ -26,6 +26,7 @@ class MainViewModel(override val context: Context) : Composeable, Utils {
     override val mPadManager: PinPadManager = mDriverManager.padManager
 
 
+
     fun initSdk() {
         try {
             mSys.showLog(true)

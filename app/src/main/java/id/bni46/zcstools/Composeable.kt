@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -44,6 +46,7 @@ interface Composeable : Utils {
     override var encryptData: String
     val keyTitleList: List<String>
     val context: Context
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -96,6 +99,7 @@ interface Composeable : Utils {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun InjectMasterKey(nav: NavHostController) {
+        val focus = LocalFocusManager.current
         Box(
             modifier = Modifier
                 .padding(bottom = 10.dp)
@@ -111,7 +115,10 @@ interface Composeable : Utils {
                     maxLines = 3,
                     value = masterKey,
                     onValueChange = { masterKey = it },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focus.clearFocus()
+                    })
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -126,7 +133,10 @@ interface Composeable : Utils {
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Decimal,
                             imeAction = ImeAction.Done
-                        )
+                        ),
+                        keyboardActions = KeyboardActions(onDone = {
+                            focus.clearFocus()
+                        })
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
@@ -147,6 +157,7 @@ interface Composeable : Utils {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun InjectWorkKey(nav: NavHostController) {
+        val focus = LocalFocusManager.current
         Box(
             modifier = Modifier
                 .padding(bottom = 10.dp)
@@ -165,6 +176,9 @@ interface Composeable : Utils {
                         maxLines = 3,
                         value = listOf(pinKey, macKey, tdkKey)[index],
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(onDone = {
+                            focus.clearFocus()
+                        }),
                         onValueChange = { v ->
                             when (index) {
                                 0 -> {
@@ -197,7 +211,10 @@ interface Composeable : Utils {
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Decimal,
                                     imeAction = ImeAction.Done
-                                )
+                                ),
+                                keyboardActions = KeyboardActions(onDone = {
+                                    focus.clearFocus()
+                                }),
                             )
                             Spacer(modifier = Modifier.width(30.dp))
                             OutlinedButton(
@@ -220,6 +237,7 @@ interface Composeable : Utils {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun EncryptData(nav: NavHostController) {
+        val focus = LocalFocusManager.current
         Box(
             modifier = Modifier
                 .padding(bottom = 10.dp)
@@ -235,7 +253,10 @@ interface Composeable : Utils {
                     maxLines = 3,
                     value = encryptData,
                     onValueChange = { encryptData = it },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {
+                        focus.clearFocus()
+                    }),
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -250,7 +271,10 @@ interface Composeable : Utils {
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Decimal,
                             imeAction = ImeAction.Done
-                        )
+                        ),
+                        keyboardActions = KeyboardActions(onDone = {
+                            focus.clearFocus()
+                        }),
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
