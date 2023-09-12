@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedButton
@@ -25,7 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 interface Composeable : Utils {
@@ -99,12 +103,15 @@ interface Composeable : Utils {
                 .padding(10.dp)
         ) {
             Column {
+                Text(text = "Master Key Injector", fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Master Key") },
                     maxLines = 3,
                     value = masterKey,
-                    onValueChange = { masterKey = it }
+                    onValueChange = { masterKey = it },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -115,7 +122,11 @@ interface Composeable : Utils {
                         label = { Text(text = "Master Key Index") },
                         maxLines = 1,
                         value = masterKeyIndex,
-                        onValueChange = { masterKeyIndex = it }
+                        onValueChange = { masterKeyIndex = it },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Done
+                        )
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
@@ -141,8 +152,11 @@ interface Composeable : Utils {
                 .padding(bottom = 10.dp)
                 .border(width = 1.dp, color = Color.Cyan)
                 .padding(10.dp)
+
         ) {
             Column {
+                Text(text = "Work Key Injector", fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(10.dp))
                 keyTitleList.forEach { f ->
                     val index = keyTitleList.indexOf(f)
                     OutlinedTextField(
@@ -150,6 +164,7 @@ interface Composeable : Utils {
                         label = { Text(text = keyTitleList[index]) },
                         maxLines = 3,
                         value = listOf(pinKey, macKey, tdkKey)[index],
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         onValueChange = { v ->
                             when (index) {
                                 0 -> {
@@ -178,7 +193,11 @@ interface Composeable : Utils {
                                 label = { Text(text = "Work Key Index") },
                                 maxLines = 1,
                                 value = workKeyIndex,
-                                onValueChange = { workKeyIndex = it }
+                                onValueChange = { workKeyIndex = it },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Decimal,
+                                    imeAction = ImeAction.Done
+                                )
                             )
                             Spacer(modifier = Modifier.width(30.dp))
                             OutlinedButton(
@@ -208,12 +227,15 @@ interface Composeable : Utils {
                 .padding(10.dp)
         ) {
             Column {
+                Text(text = "Data Encryption", fontSize = 25.sp)
+                Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Message Encryption") },
                     maxLines = 3,
                     value = encryptData,
-                    onValueChange = { encryptData = it }
+                    onValueChange = { encryptData = it },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -224,7 +246,11 @@ interface Composeable : Utils {
                         label = { Text(text = "Encrypt Key Index") },
                         maxLines = 1,
                         value = encryptDataIndex,
-                        onValueChange = { encryptDataIndex = it }
+                        onValueChange = { encryptDataIndex = it },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Done
+                        )
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
@@ -240,5 +266,4 @@ interface Composeable : Utils {
             }
         }
     }
-
 }

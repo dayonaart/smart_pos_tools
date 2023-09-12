@@ -11,10 +11,10 @@ import com.zcs.sdk.pin.pinpad.PinPadManager
 
 
 class MainViewModel(override val context: Context) : Composeable, Utils {
-    override var masterKey by mutableStateOf("484455B474A6C6115FF62236D8A09C74")
-    override var pinKey by mutableStateOf("BF1CA957FE63B286E2134E08A8F3DDA903E0686F")
-    override var macKey by mutableStateOf("8670685795c8d2ea0000000000000000d2db51f1")
-    override var tdkKey by mutableStateOf("00A0ABA733F2CBB1E61535EDCFDC34A93AA3EA2D")
+    override var masterKey by mutableStateOf("")
+    override var pinKey by mutableStateOf("")
+    override var macKey by mutableStateOf("")
+    override var tdkKey by mutableStateOf("")
     override var masterKeyIndex by mutableStateOf("0")
     override var workKeyIndex by mutableStateOf("0")
     override var encryptDataIndex by mutableStateOf("0")
