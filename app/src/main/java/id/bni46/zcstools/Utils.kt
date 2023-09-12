@@ -4,7 +4,7 @@ import com.zcs.sdk.pin.PinWorkKeyTypeEnum
 import com.zcs.sdk.pin.pinpad.PinPadManager
 import com.zcs.sdk.util.StringUtils
 
-interface Utils {
+interface Utils : ZcsResultSdk {
     val mPadManager: PinPadManager
     var masterKey: String
     var pinKey: String
@@ -22,7 +22,8 @@ interface Utils {
                 masterKeyIndex.toInt(),
                 mainKeyByte, mainKeyByte.size.toByte()
             )
-            "$ret"
+            val result = code.indexOf(ret)
+            message[result]
         } catch (e: Exception) {
             "$e"
         }
@@ -37,7 +38,8 @@ interface Utils {
                 workKeyIndex.toInt(), pinKeyByte, pinKeyByte.size.toByte(),
                 macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
             )
-            "$ret"
+            val result = code.indexOf(ret)
+            message[result]
         } catch (e: Exception) {
             "$e"
         }
@@ -53,9 +55,13 @@ interface Utils {
                 encryptData.length / 2,
                 res
             )
-            "encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
+            val result = code.indexOf(ret)
+            message[result] + ": encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
         } catch (e: Exception) {
             "$e"
         }
+    }
+
+    fun resultSDK(res: Int) {
     }
 }

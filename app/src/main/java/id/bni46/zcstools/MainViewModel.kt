@@ -10,7 +10,7 @@ import com.zcs.sdk.SdkResult
 import com.zcs.sdk.pin.pinpad.PinPadManager
 
 
-class MainViewModel(override val context: Context) : Composeable, Utils {
+class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResultSdk {
     override var masterKey by mutableStateOf("")
     override var pinKey by mutableStateOf("")
     override var macKey by mutableStateOf("")
@@ -25,8 +25,6 @@ class MainViewModel(override val context: Context) : Composeable, Utils {
     private val mSys = mDriverManager.baseSysDevice
     override val mPadManager: PinPadManager = mDriverManager.padManager
 
-
-
     fun initSdk() {
         try {
             mSys.showLog(true)
@@ -40,8 +38,13 @@ class MainViewModel(override val context: Context) : Composeable, Utils {
                 }
             }
             status = mSys.sdkInit()
+            val result = code.indexOf(status)
             if (status != SdkResult.SDK_OK) {
-                Toast.makeText(context, "Can't bind Devices Status $status", Toast.LENGTH_LONG)
+                Toast.makeText(
+                    context,
+                    "Can't bind Devices Status ${message[result]}",
+                    Toast.LENGTH_LONG
+                )
                     .show()
             }
         } catch (e: Exception) {
