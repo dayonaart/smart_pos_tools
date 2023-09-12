@@ -231,7 +231,7 @@ interface Composeable : Utils {
                 Spacer(modifier = Modifier.height(10.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    label = { Text(text = "Message Encryption") },
+                    label = { Text(text = "Data Encryption") },
                     maxLines = 3,
                     value = encryptData,
                     onValueChange = { encryptData = it },

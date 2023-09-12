@@ -18,7 +18,7 @@ class MainViewModel(override val context: Context) : Composeable, Utils {
     override var masterKeyIndex by mutableStateOf("0")
     override var workKeyIndex by mutableStateOf("0")
     override var encryptDataIndex by mutableStateOf("0")
-    override var encryptData by mutableStateOf("Message for encrypt")
+    override var encryptData by mutableStateOf("Data for encrypt")
     override var resultKey by mutableStateOf("")
     override var keyTitleList = listOf("PIN Key", "MAC Key", "TDK Key")
     private val mDriverManager = DriverManager.getInstance()
