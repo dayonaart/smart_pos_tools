@@ -221,10 +221,10 @@ interface Composeable : Utils {
                         modifier = Modifier
                             .weight(1f)
                             .wrapContentWidth(Alignment.Start),
-                        label = { Text(text = "Master Key Index") },
+                        label = { Text(text = "Encrypt Key Index") },
                         maxLines = 1,
-                        value = workKeyIndex,
-                        onValueChange = { workKeyIndex = it }
+                        value = encryptDataIndex,
+                        onValueChange = { encryptDataIndex = it }
                     )
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
