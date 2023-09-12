@@ -45,12 +45,12 @@ interface Utils : ZcsResultSdk {
         }
     }
 
-    fun setEncryptData(): String {
+    fun setEncryptData(pinWorkKeyTypeEnum: PinWorkKeyTypeEnum): String {
         return try {
             val res = byteArrayOf((encryptData.length / 2).toByte())
             val ret = mPadManager.pinPadEncryptData(
                 encryptDataIndex.toInt(),
-                PinWorkKeyTypeEnum.MAC_KEY,
+                pinWorkKeyTypeEnum,
                 StringUtils.convertHexToBytes(encryptData),
                 encryptData.length / 2,
                 res
@@ -60,8 +60,5 @@ interface Utils : ZcsResultSdk {
         } catch (e: Exception) {
             "$e"
         }
-    }
-
-    fun resultSDK(res: Int) {
     }
 }
