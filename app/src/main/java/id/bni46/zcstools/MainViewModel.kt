@@ -7,11 +7,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.zcs.sdk.DriverManager
 import com.zcs.sdk.SdkResult
+import com.zcs.sdk.Sys
 import com.zcs.sdk.pin.pinpad.PinPadManager
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResultSdk {
-    override var masterKey by mutableStateOf("")
+    override var masterKey by mutableStateOf("484455B474A6C6115FF62236D8A09C74")
     override var pinKey by mutableStateOf("")
     override var macKey by mutableStateOf("")
     override var tdkKey by mutableStateOf("")
@@ -24,6 +29,17 @@ class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResu
     private val mDriverManager = DriverManager.getInstance()
     private val mSys = mDriverManager.baseSysDevice
     override val mPadManager: PinPadManager = mDriverManager.padManager
+    override var loading by mutableStateOf(false)
+    override var logonResponseDto by mutableStateOf(LogonResponseDto(null))
+    private val driverManager = DriverManager.getInstance()
+    override val sys: Sys = driverManager.baseSysDevice
+
+    override var initResponseDto by mutableStateOf(InitResponseDto())
+    private fun getSn(): String? {
+        val pid = arrayOfNulls<String>(1)
+        sys.getPid(pid)
+        return pid[0]?.takeLast(16)
+    }
 
     fun initSdk() {
         try {
@@ -44,50 +60,31 @@ class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResu
                     context,
                     "Can't bind Devices Status ${message[result]}",
                     Toast.LENGTH_LONG
-                )
-                    .show()
+                ).show()
             }
         } catch (e: Exception) {
             Toast.makeText(context, "Can't bind Devices ${e.message}", Toast.LENGTH_LONG).show()
         }
+        init()
     }
-}
 
-
-object KeyId {
-    /**
-     * Main key.
-     */
-    @JvmStatic
-    var mainKey = 1
-
-    /**
-     * MAC key.
-     */
-    @JvmStatic
-    var macKey = 11
-
-    /**
-     * PIN key.
-     */
-    @JvmStatic
-    var pinKey = 12
-
-    /**
-     * TDK key.
-     */
-    @JvmStatic
-    var tdkKey = 13
-
-    /**
-     * DEK key.
-     */
-    @JvmStatic
-    var dekKey = 14
-
-    /**
-     * CBC MAC key.
-     */
-    @JvmStatic
-    var cbcKey = 15
+    @OptIn(DelicateCoroutinesApi::class)
+    fun init() {
+        GlobalScope.launch {
+            loading = true
+            try {
+                val retrofit = NetworkModule.provideNetwok().create(NetworkInterface::class.java)
+                val r = retrofit.init(InitDto(HSN = "${getSn()}"))
+                if (r.mmid.isNotEmpty()) {
+                    initResponseDto = r
+                }
+                loading = false
+            } catch (e: Exception) {
+                loading = false
+                launch(Dispatchers.Main) {
+                    Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }

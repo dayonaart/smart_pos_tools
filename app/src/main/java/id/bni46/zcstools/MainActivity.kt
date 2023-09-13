@@ -27,7 +27,7 @@ import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import id.bni46.zcstools.ui.theme.SmartPosTestTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), Loading {
     private val mainViewModel = MainViewModel(this)
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -77,6 +77,15 @@ class MainActivity : ComponentActivity() {
                                     0f
                                 )
                                 mainViewModel.ShowDialog(nav)
+                            }
+                            dialog(
+                                "loading",
+                                dialogProperties = DialogProperties(
+                                    dismissOnBackPress = true,
+                                    dismissOnClickOutside = true
+                                ),
+                            ) {
+                                CircleLoading()
                             }
                         }
                     }

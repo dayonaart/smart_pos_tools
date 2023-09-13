@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.zcs.sdk.Sys
 import com.zcs.sdk.pin.PinWorkKeyTypeEnum
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 interface Composeable : Utils {
     override var masterKey: String
@@ -55,7 +61,36 @@ interface Composeable : Utils {
     override var encryptData: String
     val keyTitleList: List<String>
     val context: Context
+    var loading: Boolean
+    val initResponseDto: InitResponseDto
+    val sys: Sys
+    var logonResponseDto: LogonResponseDto
+    private fun getSn(): String {
+        val pid = arrayOfNulls<String>(1)
+        sys.getPid(pid)
+        return "${pid[0]?.takeLast(16)}"
+    }
 
+
+    private suspend fun logon() {
+        loading = true
+        try {
+            val retrofit = NetworkModule.provideNetwok().create(NetworkInterface::class.java)
+            val r = retrofit.postLogon(
+                LogonRequestDto(
+                    mMID = initResponseDto.mmid,
+                    mTID = initResponseDto.mtid,
+                    serialNo = getSn()
+                )
+            )
+            if (r.secData != null) {
+                logonResponseDto = r
+            }
+            loading = false
+        } catch (e: Exception) {
+            loading = false
+        }
+    }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -92,6 +127,13 @@ interface Composeable : Utils {
 
     @Composable
     fun MainView(nav: NavHostController) {
+        LaunchedEffect(key1 = loading, block = {
+            if (loading) {
+                nav.navigate("loading")
+            } else {
+                nav.popBackStack("loading", inclusive = true)
+            }
+        })
         LazyColumn(horizontalAlignment = Alignment.End) {
             item {
                 InjectMasterKey(nav = nav)
@@ -105,7 +147,7 @@ interface Composeable : Utils {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, DelicateCoroutinesApi::class)
     @Composable
     fun InjectMasterKey(nav: NavHostController) {
         val focus = LocalFocusManager.current
@@ -150,8 +192,13 @@ interface Composeable : Utils {
                     Spacer(modifier = Modifier.width(30.dp))
                     OutlinedButton(
                         onClick = {
-                            resultKey = setMainKey()
-                            nav.navigate("dialog")
+                            GlobalScope.launch {
+                                logon()
+                                resultKey = setMainKey()
+                                launch(Dispatchers.Main) {
+                                    nav.navigate("dialog")
+                                }
+                            }
                         }
                     ) {
                         Text(text = "Inject Master Key")
@@ -183,7 +230,11 @@ interface Composeable : Utils {
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = keyTitleList[index]) },
                         maxLines = 3,
-                        value = listOf(pinKey, macKey, tdkKey)[index],
+                        value = listOf(
+                            logonResponseDto.secData?.pinKey ?: pinKey,
+                            logonResponseDto.secData?.macKey ?: macKey,
+                            logonResponseDto.secData?.dataKey ?: tdkKey
+                        )[index],
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = {
                             focus.clearFocus()
@@ -345,4 +396,5 @@ interface Composeable : Utils {
             }
         }
     }
+
 }
