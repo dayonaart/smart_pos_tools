@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
     private fun provideOkHttp(): OkHttpClient {
-        val timeoutInSeconds = 90L
+        val timeoutInSeconds = 3L
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient()
@@ -24,7 +24,7 @@ object NetworkModule {
             .build()
     }
 
-    fun provideNetwok(
+    fun provideNetwork(
     ): Retrofit {
         val baseUrl = "http://edcwebdev.hq.bni.co.id:8001/VasHost/"
         return Retrofit.Builder()

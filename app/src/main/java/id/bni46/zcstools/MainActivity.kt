@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity(), Loading {
                                 (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(
                                     0f
                                 )
-                                mainViewModel.ShowDialog(nav)
+                                mainViewModel.ShowingDialog(nav)
                             }
                             dialog(
                                 "loading",

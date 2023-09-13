@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResultSdk {
+class MainViewModel(override val context: Context) : MainScreen, Utils, ZcsResultSdk, ShowDialog {
     override var masterKey by mutableStateOf("484455B474A6C6115FF62236D8A09C74")
     override var pinKey by mutableStateOf("")
     override var macKey by mutableStateOf("")
@@ -73,7 +73,7 @@ class MainViewModel(override val context: Context) : Composeable, Utils, ZcsResu
         GlobalScope.launch {
             loading = true
             try {
-                val retrofit = NetworkModule.provideNetwok().create(NetworkInterface::class.java)
+                val retrofit = NetworkModule.provideNetwork().create(NetworkInterface::class.java)
                 val r = retrofit.init(InitDto(HSN = "${getSn()}"))
                 if (r.mmid.isNotEmpty()) {
                     initResponseDto = r
