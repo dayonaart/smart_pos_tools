@@ -51,6 +51,7 @@ interface InjectWorkKey : Utils {
                 .padding(10.dp)
 
         ) {
+
             Column {
                 Text(text = "Work Key Injector", fontSize = 25.sp)
                 Spacer(modifier = Modifier.height(10.dp))
@@ -61,9 +62,9 @@ interface InjectWorkKey : Utils {
                         label = { Text(text = keyTitleList[index]) },
                         maxLines = 3,
                         value = listOf(
-                            logonResponseDto.secData?.pinKey ?: pinKey,
-                            logonResponseDto.secData?.macKey ?: macKey,
-                            logonResponseDto.secData?.dataKey ?: tdkKey
+                            resultKey(logonResponseDto.secData?.pinKey) ?: pinKey,
+                            resultKey(logonResponseDto.secData?.macKey) ?: macKey,
+                            resultKey(logonResponseDto.secData?.dataKey) ?: tdkKey
                         )[index],
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(onDone = {
@@ -120,6 +121,14 @@ interface InjectWorkKey : Utils {
                     Spacer(modifier = Modifier.height(20.dp))
                 }
             }
+        }
+    }
+
+    private fun resultKey(key: String?): String? {
+        return try {
+            key?.substring(1, key.length)
+        } catch (e: Exception) {
+            null
         }
     }
 }

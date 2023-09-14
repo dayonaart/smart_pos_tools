@@ -109,7 +109,7 @@ interface EncryptData : Utils {
                                     }
                                 }
                             }) {
-                            Text(text = encryptionTypeName[i], fontSize = 10.sp)
+                            Text(text = encryptionTypeName[i], fontSize = 10.sp, color = Color.Blue)
                         }
                         Spacer(modifier = Modifier.width(5.dp))
                     }
