@@ -90,7 +90,7 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
         })
         LazyColumn(horizontalAlignment = Alignment.End) {
             item {
-                ExampleKey()
+                ExampleIndexKey()
             }
             item {
                 InjectMasterKey(nav = nav)
@@ -168,7 +168,7 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
     }
 
     @Composable
-    fun ExampleKey() {
+    fun ExampleIndexKey() {
         Box(
             modifier = Modifier
                 .padding(bottom = 10.dp)
