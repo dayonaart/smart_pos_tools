@@ -90,28 +90,7 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
         })
         LazyColumn(horizontalAlignment = Alignment.End) {
             item {
-                Box(
-                    modifier = Modifier
-                        .padding(bottom = 10.dp)
-                        .border(width = 1.dp, color = Color.Yellow)
-                        .padding(10.dp)
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.Start,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(text = "KEY INDEX")
-                        Spacer(modifier = Modifier.height(10.dp))
-                        LazyVerticalGrid(
-                            modifier = Modifier.height(80.dp),
-                            columns = GridCells.Fixed(2),
-                            content = {
-                                items(exampleKeyIdList.size) {
-                                    Text(text = exampleKeyIdList[it])
-                                }
-                            })
-                    }
-                }
+                ExampleKey()
             }
             item {
                 InjectMasterKey(nav = nav)
@@ -188,5 +167,29 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
         }
     }
 
-
+    @Composable
+    fun ExampleKey() {
+        Box(
+            modifier = Modifier
+                .padding(bottom = 10.dp)
+                .border(width = 1.dp, color = Color.Yellow)
+                .padding(10.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "KEY INDEX")
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyVerticalGrid(
+                    modifier = Modifier.height(80.dp),
+                    columns = GridCells.Fixed(2),
+                    content = {
+                        items(exampleKeyIdList.size) {
+                            Text(text = exampleKeyIdList[it])
+                        }
+                    })
+            }
+        }
+    }
 }

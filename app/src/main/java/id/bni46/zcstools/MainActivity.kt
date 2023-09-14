@@ -81,8 +81,8 @@ class MainActivity : ComponentActivity(), Loading {
                             dialog(
                                 "loading",
                                 dialogProperties = DialogProperties(
-                                    dismissOnBackPress = true,
-                                    dismissOnClickOutside = true
+                                    dismissOnBackPress = false,
+                                    dismissOnClickOutside = false
                                 ),
                             ) {
                                 CircleLoading()

@@ -51,7 +51,6 @@ interface InjectWorkKey : Utils {
                 .padding(10.dp)
 
         ) {
-
             Column {
                 Text(text = "Work Key Injector", fontSize = 25.sp)
                 Spacer(modifier = Modifier.height(10.dp))

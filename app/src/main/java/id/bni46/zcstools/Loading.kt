@@ -23,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 interface Loading {
-
     @Composable
     fun CircleLoading(
         circleColor: Color = Color.Magenta,
