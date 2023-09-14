@@ -46,23 +46,25 @@ interface EncryptData : Utils {
     override var encryptDataIndex: String
     var resultKey: String
     override var encryptData: String
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun EncryptingData(nav: NavHostController) {
-        val focus = LocalFocusManager.current
-        val encryptionTypeList = listOf(
+    val encryptionTypeList: List<PinWorkKeyTypeEnum>
+        get() = listOf(
             PinWorkKeyTypeEnum.MAC_KEY,
             PinWorkKeyTypeEnum.PIN_KEY,
             PinWorkKeyTypeEnum.TDKEY,
             PinWorkKeyTypeEnum.ORTHER,
         )
-        val encryptionTypeName = listOf(
+    val encryptionTypeName: List<String>
+        get() = listOf(
             "MAC KEY",
             "PIN KEY",
             "TDKEY",
             "ORTHER",
         )
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun EncryptingData(nav: NavHostController) {
+        val focus = LocalFocusManager.current
         var buttonColor by remember {
             mutableStateOf((0..encryptionTypeList.size).map { i ->
                 if (i == 0) {
