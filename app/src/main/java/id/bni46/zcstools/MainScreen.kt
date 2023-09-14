@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -88,6 +90,30 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
         })
         LazyColumn(horizontalAlignment = Alignment.End) {
             item {
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .border(width = 1.dp, color = Color.Yellow)
+                        .padding(10.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "KEY INDEX")
+                        Spacer(modifier = Modifier.height(10.dp))
+                        LazyVerticalGrid(
+                            modifier = Modifier.height(80.dp),
+                            columns = GridCells.Fixed(2),
+                            content = {
+                                items(exampleKeyIdList.size) {
+                                    Text(text = exampleKeyIdList[it])
+                                }
+                            })
+                    }
+                }
+            }
+            item {
                 InjectMasterKey(nav = nav)
             }
             item {
@@ -161,5 +187,6 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
             }
         }
     }
+
 
 }
