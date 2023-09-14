@@ -1,8 +1,21 @@
 package id.bni46.zcstools
 
-import com.zcs.sdk.pin.PinWorkKeyTypeEnum
+import android.annotation.SuppressLint
+import android.util.Log
+import com.zcs.sdk.Sys
 import com.zcs.sdk.pin.pinpad.PinPadManager
 import com.zcs.sdk.util.StringUtils
+import java.security.InvalidAlgorithmParameterException
+import java.security.InvalidKeyException
+import java.security.Key
+import java.security.NoSuchAlgorithmException
+import java.security.spec.InvalidKeySpecException
+import javax.crypto.BadPaddingException
+import javax.crypto.Cipher
+import javax.crypto.IllegalBlockSizeException
+import javax.crypto.NoSuchPaddingException
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.DESedeKeySpec
 
 interface Utils {
     val mPadManager: PinPadManager
@@ -12,8 +25,14 @@ interface Utils {
     var tdkKey: String
     var masterKeyIndex: String
     var workKeyIndex: String
-    var encryptDataIndex: String
+    var decryptKeyIndex: String
     var encryptData: String
+    var loading: Boolean
+    val initResponseDto: InitResponseDto
+    val sys: Sys
+    var logonResponseDto: LogonResponseDto
+    val des_0: ByteArray
+        get() = ByteArray(8)
 
     fun setMainKey(): String {
         return try {
@@ -45,20 +64,112 @@ interface Utils {
         }
     }
 
-    fun setEncryptData(pinWorkKeyTypeEnum: PinWorkKeyTypeEnum): String {
+    fun setEncryptData(): String {
         return try {
-            val res = byteArrayOf((encryptData.length / 2).toByte())
-            val ret = mPadManager.pinPadEncryptData(
-                encryptDataIndex.toInt(),
-                pinWorkKeyTypeEnum,
+            // The working key ciphertext is obtained by encrypting the Pin plaintext key with the master key
+            val encryptedPinkey: ByteArray? = encodeTripleDES(
                 StringUtils.convertHexToBytes(encryptData),
-                encryptData.length / 2,
-                res
+                StringUtils.convertHexToBytes(macKey)
             )
-            val result = zcsSdkResult.find { it.contains("$ret") }
-            "$result" + ": encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
+            Log.d("Debug", "encrypted_pinkey: " + StringUtils.convertBytesToHex(encryptedPinkey))
+            // Generates a check value
+            val encryptedPinkeyValue: ByteArray? =
+                encodeTripleDES(des_0, StringUtils.convertHexToBytes(encryptData))
+            //Combine the working key ciphertext with the check value
+            val pinKey =
+                StringUtils.convertBytesToHex(encryptedPinkey) + StringUtils.convertBytesToHex(
+                    encryptedPinkeyValue
+                ).substring(0, 8)
+            Log.d("Debug", "pin_key: $pinKey")
+            // The working key ciphertext is obtained by encrypting the mac plaintext key with the master key
+            // The working key ciphertext is obtained by encrypting the mac plaintext key with the master key
+            val encryptedMackey: ByteArray? = encodeTripleDES(
+                StringUtils.convertHexToBytes(encryptData),
+                StringUtils.convertHexToBytes(macKey)
+            )
+            Log.d("Debug", "encrypted_mackey: " + StringUtils.convertBytesToHex(encryptedMackey))
+            // Generates a check value
+            val encryptedMackeyValue: ByteArray? =
+                encodeTripleDES(des_0, StringUtils.convertHexToBytes(encryptData))
+            //Combine the working key ciphertext with the check value
+            val _macKey =
+                StringUtils.convertBytesToHex(encryptedPinkey) + StringUtils.convertBytesToHex(
+                    encryptedMackeyValue
+                ).substring(0, 8)
+            Log.d("Debug", "mac_key: $_macKey")
+            // The working key ciphertext is obtained by encrypting the mac plaintext key with the master key
+            val encryptedTdkkey: ByteArray? = encodeTripleDES(
+                StringUtils.convertHexToBytes(encryptData),
+                StringUtils.convertHexToBytes(_macKey)
+            )
+            Log.d("Debug", "encrypted_tdkkey: " + StringUtils.convertBytesToHex(encryptedTdkkey))
+            // Generates a check value
+            val encryptedTdkkeyValue: ByteArray? =
+                encodeTripleDES(des_0, StringUtils.convertHexToBytes(encryptData))
+            //Combine the working key ciphertext with the check value
+            val tdkKey =
+                StringUtils.convertBytesToHex(encryptedTdkkey) + StringUtils.convertBytesToHex(
+                    encryptedTdkkeyValue
+                ).substring(0, 8)
+            ""
         } catch (e: Exception) {
-            "$e\nByte Array : ${byteArrayOf(((encryptData.length / 2).toByte()))}\ninput length : ${encryptData.length / 2}"
+            "${e.message}"
         }
     }
+
+
+    @SuppressLint("GetInstance")
+    @Throws(
+        NoSuchAlgorithmException::class,
+        NoSuchPaddingException::class,
+        InvalidKeyException::class,
+        IllegalBlockSizeException::class,
+        BadPaddingException::class,
+        InvalidAlgorithmParameterException::class,
+        InvalidKeySpecException::class
+    )
+    fun encodeTripleDES(data: ByteArray?, key: ByteArray): ByteArray? {
+        val keys: ByteArray
+        if (key.size == 16) {
+            keys = ByteArray(24)
+            System.arraycopy(key, 0, keys, 0, 16)
+            System.arraycopy(key, 0, keys, 16, 8)
+        } else {
+            keys = key
+        }
+        val spec = DESedeKeySpec(keys)
+        val factory = SecretKeyFactory.getInstance("DESede")
+        val secretKey: Key = factory.generateSecret(spec)
+        val cipher: Cipher? = Cipher.getInstance("DESede/ECB/NoPadding")
+        cipher?.init(Cipher.ENCRYPT_MODE, secretKey)
+        return cipher?.doFinal(data)
+    }
+
+    private fun getSn(): String {
+        val pid = arrayOfNulls<String>(1)
+        sys.getPid(pid)
+        return "${pid[0]?.takeLast(16)}"
+    }
+
+
+    suspend fun logon() {
+        try {
+            loading = true
+            val retrofit = NetworkModule.provideNetwork().create(NetworkInterface::class.java)
+            val r = retrofit.postLogon(
+                LogonRequestDto(
+                    mMID = initResponseDto.mmid,
+                    mTID = initResponseDto.mtid,
+                    serialNo = getSn()
+                )
+            )
+            if (r.secData != null) {
+                logonResponseDto = r
+            }
+            loading = false
+        } catch (e: Exception) {
+            loading = false
+        }
+    }
+
 }

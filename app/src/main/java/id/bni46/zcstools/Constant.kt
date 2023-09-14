@@ -58,10 +58,14 @@ val zcsSdkResult = zcsResultCodeField
     }
 val exampleKeyIdList = KeyId::class.members.filter { it.name.contains("Key") }
     .map {
-        "${it.name.uppercase(Locale.getDefault())} = ${
-            readInstanceProperty<Int>(
-                KeyId,
-                it.name
-            )
-        }"
+        ExampleKey(
+            name = it.name.uppercase(Locale.getDefault()), value = "${
+                readInstanceProperty<Int>(
+                    KeyId,
+                    it.name
+                )
+            }"
+        )
     }
+
+data class ExampleKey(val name: String, val value: String)

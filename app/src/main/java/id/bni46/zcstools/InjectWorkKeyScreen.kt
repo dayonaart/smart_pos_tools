@@ -27,18 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
-interface InjectWorkKey : Utils {
+interface InjectWorkKeyScreen : Utils, ExampleKeyIndexScreen {
     override var masterKey: String
     override var pinKey: String
     override var macKey: String
     override var tdkKey: String
-    override var masterKeyIndex: String
     override var workKeyIndex: String
-    override var encryptDataIndex: String
     var resultKey: String
     override var encryptData: String
     val keyTitleList: List<String>
-    var logonResponseDto: LogonResponseDto
+    override var logonResponseDto: LogonResponseDto
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
@@ -86,34 +84,41 @@ interface InjectWorkKey : Utils {
                         }
                     )
                     if ((index + 1) == keyTitleList.size) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(top = 10.dp)
-                        ) {
-                            OutlinedTextField(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .wrapContentWidth(Alignment.Start),
-                                label = { Text(text = "Work Key Index") },
-                                maxLines = 1,
-                                value = workKeyIndex,
-                                onValueChange = { workKeyIndex = it },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Decimal,
-                                    imeAction = ImeAction.Done
-                                ),
-                                keyboardActions = KeyboardActions(onDone = {
-                                    focus.clearFocus()
-                                }),
-                            )
-                            Spacer(modifier = Modifier.width(30.dp))
-                            OutlinedButton(
-                                onClick = {
-                                    resultKey = setPinPadUpWorkKey()
-                                    nav.navigate("dialog")
-                                }
+                        Column {
+                            Spacer(modifier = Modifier.height(10.dp))
+                            ExampleIndexKey(onSelect = {
+                                workKeyIndex = it
+                            })
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
                             ) {
-                                Text(text = "Setup work key")
+                                OutlinedTextField(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentWidth(Alignment.Start),
+                                    label = { Text(text = "Work Key Index") },
+                                    maxLines = 1,
+                                    value = workKeyIndex,
+                                    readOnly = true,
+                                    onValueChange = { },
+                                    keyboardOptions = KeyboardOptions(
+                                        keyboardType = KeyboardType.Decimal,
+                                        imeAction = ImeAction.Done
+                                    ),
+                                    keyboardActions = KeyboardActions(onDone = {
+                                        focus.clearFocus()
+                                    }),
+                                )
+                                Spacer(modifier = Modifier.width(30.dp))
+                                OutlinedButton(
+                                    onClick = {
+                                        resultKey = setPinPadUpWorkKey()
+                                        nav.navigate("dialog")
+                                    }
+                                ) {
+                                    Text(text = "Setup work key")
+                                }
                             }
                         }
                     }

@@ -22,7 +22,7 @@ class MainViewModel(override val context: Context) : MainScreen, Utils, ShowDial
     override var tdkKey by mutableStateOf("")
     override var masterKeyIndex by mutableStateOf("0")
     override var workKeyIndex by mutableStateOf("0")
-    override var encryptDataIndex by mutableStateOf("0")
+    override var decryptKeyIndex by mutableStateOf("0")
     override var encryptData by mutableStateOf("Data for encrypt")
     override var resultKey by mutableStateOf("")
     override var keyTitleList = listOf("PIN Key", "MAC Key", "TDK Key")
