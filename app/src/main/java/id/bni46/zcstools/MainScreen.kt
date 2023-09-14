@@ -1,6 +1,5 @@
 package id.bni46.zcstools
 
-import android.content.Context
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +47,6 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
     override var resultKey: String
     override var encryptData: String
     override val keyTitleList: List<String>
-    val context: Context
     var loading: Boolean
     val initResponseDto: InitResponseDto
     val sys: Sys

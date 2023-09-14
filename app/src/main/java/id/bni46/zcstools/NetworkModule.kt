@@ -26,7 +26,7 @@ object NetworkModule {
 
     fun provideNetwork(
     ): Retrofit {
-        val baseUrl = "http://edcwebdev.hq.bni.co.id:8001/VasHost/"
+        val baseUrl = "http://edcwebdev.hq.bni.co.id:8001/AposHost/"
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(provideOkHttp())
