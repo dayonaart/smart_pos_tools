@@ -1,5 +1,7 @@
 package id.bni46.zcstools
 
+import com.zcs.sdk.SdkResult
+import java.lang.reflect.Field
 import java.util.Locale
 import kotlin.reflect.KProperty1
 
@@ -49,6 +51,11 @@ fun <R> readInstanceProperty(instance: Any, propertyName: String): R {
     return property.get(instance) as R
 }
 
+private val zcsResultCodeField: Array<Field> = SdkResult::class.java.fields
+val zcsSdkResult = zcsResultCodeField
+    .map {
+        "${it.name.uppercase(Locale.getDefault())} = ${it.get(it.name)}"
+    }
 val exampleKeyIdList = KeyId::class.members.filter { it.name.contains("Key") }
     .map {
         "${it.name.uppercase(Locale.getDefault())} = ${

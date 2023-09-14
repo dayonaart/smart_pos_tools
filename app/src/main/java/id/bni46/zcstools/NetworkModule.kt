@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
     private fun provideOkHttp(): OkHttpClient {
-        val timeoutInSeconds = 90L
+        val timeoutInSeconds = 3L
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         return OkHttpClient()

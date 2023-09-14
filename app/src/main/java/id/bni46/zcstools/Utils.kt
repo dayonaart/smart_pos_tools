@@ -4,7 +4,7 @@ import com.zcs.sdk.pin.PinWorkKeyTypeEnum
 import com.zcs.sdk.pin.pinpad.PinPadManager
 import com.zcs.sdk.util.StringUtils
 
-interface Utils : ZcsResultSdk {
+interface Utils {
     val mPadManager: PinPadManager
     var masterKey: String
     var pinKey: String
@@ -22,8 +22,8 @@ interface Utils : ZcsResultSdk {
                 masterKeyIndex.toInt(),
                 mainKeyByte, mainKeyByte.size.toByte()
             )
-            val result = code.indexOf(ret)
-            message[result]
+            val result = zcsSdkResult.find { it.contains("$ret") }
+            "$result"
         } catch (e: Exception) {
             "$e"
         }
@@ -38,8 +38,8 @@ interface Utils : ZcsResultSdk {
                 workKeyIndex.toInt(), pinKeyByte, pinKeyByte.size.toByte(),
                 macKeyByte, macKeyByte.size.toByte(), tdkeyByte, tdkeyByte.size.toByte()
             )
-            val result = code.indexOf(ret)
-            message[result]
+            val result = zcsSdkResult.find { it.contains("$ret") }
+            "$result"
         } catch (e: Exception) {
             "$e"
         }
@@ -55,8 +55,8 @@ interface Utils : ZcsResultSdk {
                 encryptData.length / 2,
                 res
             )
-            val result = code.indexOf(ret)
-            message[result] + ": encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
+            val result = zcsSdkResult.find { it.contains("$ret") }
+            "$result" + ": encryptData: " + ret + " " + StringUtils.convertBytesToHex(res)
         } catch (e: Exception) {
             "$e\nByte Array : ${byteArrayOf(((encryptData.length / 2).toByte()))}\ninput length : ${encryptData.length / 2}"
         }

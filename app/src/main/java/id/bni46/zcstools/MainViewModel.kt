@@ -15,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class MainViewModel(override val context: Context) : MainScreen, Utils, ZcsResultSdk, ShowDialog {
+class MainViewModel(override val context: Context) : MainScreen, Utils, ShowDialog {
     override var masterKey by mutableStateOf("484455B474A6C6115FF62236D8A09C74")
     override var pinKey by mutableStateOf("")
     override var macKey by mutableStateOf("")
@@ -54,11 +54,11 @@ class MainViewModel(override val context: Context) : MainScreen, Utils, ZcsResul
                 }
             }
             status = mSys.sdkInit()
-            val result = code.indexOf(status)
+            val result = zcsSdkResult.find { it.contains("$status") }
             if (status != SdkResult.SDK_OK) {
                 Toast.makeText(
                     context,
-                    "Can't bind Devices Status ${message[result]}",
+                    "Can't bind Devices Status $result",
                     Toast.LENGTH_LONG
                 ).show()
             }

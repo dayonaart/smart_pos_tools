@@ -182,7 +182,7 @@ interface MainScreen : Utils, InjectWorkKey, EncryptData {
                 Text(text = "KEY INDEX")
                 Spacer(modifier = Modifier.height(10.dp))
                 LazyVerticalGrid(
-                    modifier = Modifier.height(80.dp),
+                    modifier = Modifier.height(100.dp),
                     columns = GridCells.Fixed(2),
                     content = {
                         items(exampleKeyIdList.size) {
